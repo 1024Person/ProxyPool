@@ -9,14 +9,16 @@ from save import SaveIp
 # 参数page：控制获取多少也代理
 # 默认获取5页代理
 class CrawlerIp(object):
-    # 参数：base_url 要爬取得代理网址 默认是setting文件中的base_url
-    # 参数：headers 定制headers 默认是setting文件中的crawler_headers
-    # 参数：page  要爬多少页 默认是5页
-    # 参数：save_mode 爬取下来的代理ip保存到文件中的格式 默认是'w'
-    # 参数：prase_fn 解析ip网页的解析方法，默认是使用该类自带的__get_ip
+    # 参数：base_url : 要爬取得代理网址 默认是setting文件中的base_url
+    # 参数：headers  : 定制headers 默认是setting文件中的crawler_headers
+    # 参数：page     : 要爬多少页 默认是5页
+    # 参数：save_mode: 爬取下来的代理ip保存到文件中的格式 默认是'w'
+    # 参数：prase_fn : 解析ip网页的解析方法，默认是使用该类自带的__get_ip
+    # 参数：save_fn  : 保存ip的函数，默认是SaveIp的run方法
     #----------这两个参数---------# 参数：save_obj 用来保存代理ip的函数（可能会存储到数据库中，所以这里需要再次添加一个接口）
     #-----------有点难------------# 参数：save_obj_kwagrs  初始化save_obj对象需要用的参数
-    def __init__(self,base_url=crawler_base_url,headers=crawler_headers,pages=5,save_mode="w",parse_fn=None):
+    def __init__(self,base_url=crawler_base_url,headers=crawler_headers,pages=5,save_mode="w",parse_fn=None,save_fn=None):
+        self.save_mode = save_mode
         self.base_url = base_url
         self.pages = pages
         self.PoolSpider = ThreadPoolExecutor(max_workers=8,thread_name_prefix="Crawler Pool")
@@ -25,6 +27,10 @@ class CrawlerIp(object):
             self.parse_fn = self.__get_ips
         else:
             self.parse_fn = parse_fn
+        if not save_fn:
+            self.save_fn = SaveIp(mode=self.save_mode).run
+        else:
+            self.save_fn = save_fn
     
    
 
@@ -36,11 +42,10 @@ class CrawlerIp(object):
     # 要爬取得网站需要在刚开始创建Crawler对象的时候，将爬取网站的分页网址基本格式（将页码那个参数空出来）传入进来
     def crawl_and_save_ip(self):
         for page in range(1,self.pages + 1):
-            
             print("开始爬取第{}页".format(page))
-            save = SaveIp(mode="a")
+            save = SaveIp(mode=self.save_mode)
             future = self.PoolSpider.submit(self.parse_fn,(page,))
-            future.add_done_callback(save.run)
+            future.add_done_callback(self.save_fn)
         print("爬取完成")
         self.PoolSpider.shutdown(wait=True)
 

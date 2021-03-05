@@ -1,5 +1,4 @@
 # 全局配置模块
-# 想法：将base_url设置成一个列表，然后base_url中存放的都是可以分页爬取的url格式
 csv_file_path = "./ip.csv"
 good_ips_file_path = "./good_ips.csv"
 check_max_worker = 100
@@ -9,10 +8,9 @@ crawler_headers = {
     # "Cookie":"__cfduid=de5c9ec98af53915dc14f4622331ddf761614767315; _ga=GA1.2.1591298820.1614767324; _gid=GA1.2.113901976.1614767324; __gads=ID=b4bfc0f0721d17ed-225b8bae35c6004c:T=1614767323:RT=1614767323:S=ALNI_MYDIzlIxyyBne3Rh5CuUFN06W01MA"
 }
 
-NumWeb = 1  # 设置可获取代理的网站的数量
 crawler_base_url = "https://www.freeproxy.world/?type=&anonymity=&country=&speed=&port=&page={}"
 
-
+save_mode="w"
 
 test_url = "http://httpbin.org/get"
 test_headers = {
