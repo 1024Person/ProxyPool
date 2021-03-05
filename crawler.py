@@ -3,7 +3,7 @@ from scrapy import Selector
 from setting import USER_AGENT_LIST,crawler_headers
 from random import choice
 from concurrent.futures import ThreadPoolExecutor
-from setting import base_url
+from setting import crawler_base_url
 from save import SaveIp
 
 # 参数page：控制获取多少也代理
@@ -16,7 +16,7 @@ class CrawlerIp(object):
     # 参数：prase_fn 解析ip网页的解析方法，默认是使用该类自带的__get_ip
     #----------这两个参数---------# 参数：save_obj 用来保存代理ip的函数（可能会存储到数据库中，所以这里需要再次添加一个接口）
     #-----------有点难------------# 参数：save_obj_kwagrs  初始化save_obj对象需要用的参数
-    def __init__(self,base_url=base_url,headers=crawler_headers,pages=5,save_mode="w",parse_fn=None):
+    def __init__(self,base_url=crawler_base_url,headers=crawler_headers,pages=5,save_mode="w",parse_fn=None):
         self.base_url = base_url
         self.pages = pages
         self.PoolSpider = ThreadPoolExecutor(max_workers=8,thread_name_prefix="Crawler Pool")

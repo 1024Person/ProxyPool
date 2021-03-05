@@ -10,7 +10,7 @@ crawler_headers = {
 }
 
 NumWeb = 1  # 设置可获取代理的网站的数量
-base_url = "https://www.freeproxy.world/?type=&anonymity=&country=&speed=&port=&page={}"
+crawler_base_url = "https://www.freeproxy.world/?type=&anonymity=&country=&speed=&port=&page={}"
 
 
 
