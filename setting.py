@@ -2,22 +2,17 @@
 # 想法：将base_url设置成一个列表，然后base_url中存放的都是可以分页爬取的url格式
 csv_file_path = "./ip.csv"
 good_ips_file_path = "./good_ips.csv"
-
-
-headers = {
+check_max_worker = 100
+crawler_pages = 5
+crawler_headers = {
     "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0",
-    "Cookie":"__cfduid=de5c9ec98af53915dc14f4622331ddf761614767315; _ga=GA1.2.1591298820.1614767324; _gid=GA1.2.113901976.1614767324; __gads=ID=b4bfc0f0721d17ed-225b8bae35c6004c:T=1614767323:RT=1614767323:S=ALNI_MYDIzlIxyyBne3Rh5CuUFN06W01MA"
+    # "Cookie":"__cfduid=de5c9ec98af53915dc14f4622331ddf761614767315; _ga=GA1.2.1591298820.1614767324; _gid=GA1.2.113901976.1614767324; __gads=ID=b4bfc0f0721d17ed-225b8bae35c6004c:T=1614767323:RT=1614767323:S=ALNI_MYDIzlIxyyBne3Rh5CuUFN06W01MA"
 }
 
 NumWeb = 1  # 设置可获取代理的网站的数量
 base_url = "https://www.freeproxy.world/?type=&anonymity=&country=&speed=&port=&page={}"
 
-test_url_2 = "http://ip.tool.chinaz.com"
-test_headers_2={
-    "Cookie":"qHistory=aHR0cDovL2lwLnRvb2wuY2hpbmF6LmNvbV9JUC9JUHY25p+l6K+i77yM5pyN5Yqh5Zmo5Zyw5Z2A5p+l6K+i; Hm_lvt_ca96c3507ee04e182fb6d097cb2a1a4c=1614768216; Hm_lpvt_ca96c3507ee04e182fb6d097cb2a1a4c=1614768216; UM_distinctid=177f7afa5c7133-08f6b4a24ca572-4c3f227c-144000-177f7afa5c8400; CNZZDATA5082706=cnzz_eid%3D1386521425-1614764508-%26ntime%3D1614764508",
-    "Host":"ip.tool.chinaz.com",
-    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0"
-}
+
 
 test_url = "http://httpbin.org/get"
 test_headers = {
@@ -25,6 +20,13 @@ test_headers = {
     "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0"
 }
 USER_AGENT_LIST = [
+    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 ',
+    'Mozilla/5.0 (Windows NT 5.1; U; en; rv:1.8.1) Gecko/20061208 Firefox/2.0.0 Opera 9.50',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.11 TaoBrowser/2.0 Safari/536.11',
     "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50",
     "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50",
     "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0",
