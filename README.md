@@ -39,19 +39,23 @@
 
 > -- **ProxyPool**
 >
-> ​	|	
+> ​		|	
 >
-> ​	|	-- setting.py  	------> 全局配置
+> ​		|	-- setting.py  	------> 全局配置
 >
-> ​	|	-- check.py    	------> 检测ip可用性模块
+> ​		|	-- check.py    	------> 检测ip可用性模块
 >
-> ​	|	-- crawler.py  	------> 爬取ip代理模块
+> ​		|	-- crawler.py  	------> 爬取ip代理模块
 >
-> ​	|	-- poolclient.py  ------> 连接代理池模块
+> ​		|	-- poolclient.py  ------> 连接代理池模块
 >
-> ​	|	-- save.py 	     ------> 保存模块
+> ​		|	-- save.py 	     ------> 保存模块
 >
-> ​	|	-- scheduler.py  -------> 调度模块
+> ​		|	-- scheduler.py  -------> 调度模块
+>
+> ​		|	-- ip.csv             -------> 混沌池
+>
+> ​		|	-- good_ips.csv  -------> 优质池
 
 ### setting全局配置
 
