@@ -43,7 +43,7 @@
 
    注意：**连接器**内置了 **IP** 分数管理机制
 
-<img src="C:\Users\ASUS\Desktop\ProxyPool\Proxy_Pool_Abstraction.png" alt="Proxy_Pool_Abstraction" style="zoom:60%;" />
+<img src=".\Proxy_Pool_Abstraction.png" alt="Proxy_Pool_Abstraction" style="zoom:60%;" />
 
 ## 项目结构
 
