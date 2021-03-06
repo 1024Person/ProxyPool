@@ -12,8 +12,8 @@ import os
 class PoolClient(object):
     # 参数：csv_file_path       普通ip数据池所在路径
     #       good_ips_file_path  可用性强的ip所在路径
-
-    def __init__(self,csv_file_path=csv_file_path, good_ips_file_path=good_ips_file_path):
+    #       client_save_mode    更新之后的ip的保存方式
+    def __init__(self,csv_file_path=csv_file_path, good_ips_file_path=good_ips_file_path,client_save_mode='w'):
         self.csv_file_path = csv_file_path          
         self.good_ips_file_path = good_ips_file_path
         self.ips_df = pd.read_csv(self.csv_file_path)    # 读取出来的数据是dataframe形式的
@@ -26,8 +26,6 @@ class PoolClient(object):
         else:
             self.good_ips = pd.DataFrame(data=[],columns=["ip","scores"])  
         self.good_ips.columns = ["ip",'scores']
-
-
 
         self.__update_ip_pool() # 先将数据池更新一下
 
@@ -101,6 +99,7 @@ class PoolClient(object):
     # good_ips: 删除分数小于或者等于90的，删除重复的
     #           添加分数大于90分的
     def __update_ip_pool(self):
+        print("df.shape:",self.ips_df.shape)
         self.ips_df = self.ips_df.drop(index=(self.ips_df.loc[(self.ips_df["scores"] <= 0)].index))
         self.ips_df = self.ips_df.drop_duplicates(subset=["ip"])  # 将重复的ip合并
         # 合并两个dataFrame
@@ -110,6 +109,7 @@ class PoolClient(object):
         self.good_ips = self.good_ips.drop_duplicates(subset=["ip"])
         # 将分数小于90或者等于90分的从good_ips中删除
         self.good_ips = self.good_ips.drop(index=(self.good_ips.loc[(self.good_ips["scores"] <= 90)].index))  # 删除good_ips中分数小于90分的
+        print("df.shape",self.ips_df.shape)
 
         
     
@@ -134,8 +134,10 @@ class PoolClient(object):
         back_ip = self.ips_df.loc[index]
         index = self.good_ips.loc[(self.good_ips["ip"] == ip["ip"])].index
         if not index.empty:
-            self.good_ips.loc[index,"scores"] -= 1 # 找到这个ip将这个ip减一分
-
+            try:
+                self.good_ips.loc[index,"scores"] -= 1 # 找到这个ip将这个ip减一分
+            except:
+                print(index.empty,'\t\t\t',index)
         return back_ip
 
 

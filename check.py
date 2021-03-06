@@ -17,7 +17,6 @@ class CheckIp():
         self.test_url = ts_url
         self.test_header = ts_headers
         self.CheckPool = ThreadPoolExecutor(max_workers=check_max_worker,thread_name_prefix="CheckIp")
-        self.tasks = []
         if not check_fn :
             self.check_fn = self.__check
         else:
@@ -32,7 +31,6 @@ class CheckIp():
         for ip in self.poolclient.get_all_ip():
             future = self.CheckPool.submit(self.check_fn,(ip,))
             future.add_done_callback(self.__update_pool)
-            self.tasks.append(future)
         
         
     
@@ -86,6 +84,9 @@ class CheckIp():
             return (False,ip)
         except requests.exceptions.TooManyRedirects:
             print("我也不知道怎么就出错了")
+            return (False,ip)
+        except requests.exceptions.ReadTimeout:
+            print("ReadTimeout")
             return (False,ip)
         except:
             return (False,ip)
