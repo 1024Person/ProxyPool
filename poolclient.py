@@ -68,7 +68,6 @@ class PoolClient(object):
 
 
     # 关闭代理池，将ips_df和good_ip都写入文件
-    # return 返回代理池的合格率
     def shutdown(self):
         self.__update_ip_pool()  # 关闭数据池之前将数据池更新一下
         self.__sort_ip()
@@ -80,7 +79,6 @@ class PoolClient(object):
         self.good_ips.to_csv(self.good_ips_file_path,mode="w",index=None,columns=None,header=False)
         # 打印代理池关闭成功
         print("数据池关闭成功")
-        # return self.rate
 
 
     # 参数：ip : 要查询分数的ip

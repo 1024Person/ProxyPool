@@ -10,17 +10,12 @@ class SaveIp(object):
     def __init__(self,csv_file_path=csv_file_path,mode='w'):
         self.mode=mode
         self.csv_file_path = csv_file_path
-        print("文件保存方式",self.mode)
         
     
     # 将ip保存到文件中吧，
     def run(self,ips):
         # print(future.done())
         if ips: 
-            # ips = result
-            print("文件保存方式：",self.mode)
-
-            # ips_series = pd.Series(data=ips)
             scores = [10 for _ in range(len(ips))]
             df = pd.DataFrame({"ip":ips,"scores":scores})
             df.to_csv(self.csv_file_path,index=None,mode=self.mode,columns=None,header=False)

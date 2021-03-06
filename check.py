@@ -41,7 +41,7 @@ class CheckIp():
         print("检查池关闭成功")
         self.poolclient.shutdown()  # 关闭数据池
         
-
+    # 获取代理池成功率
     def get_success_rate(self):
         return self.__success_ip_count / self.__total_ip_count
     

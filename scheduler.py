@@ -11,13 +11,14 @@ class Scheduler(object):
     # 参数：crawler_parse_fn: 解析爬取代理网站的函数，默认是使用CrawlerIp类自带的__get_ips方法(该方法只适用于当前setting文件中的base_url)
     # 参数：crawler_page :  爬取几页代理ip，默认是使用setting文件中全局配置的crawler_pages
     # 参数：save_m: 爬取下来的ip使用什么方式保存到文件中,默认按照setting全局配置中的save_mode来保存文件
+    # 参数：save_path: 爬取下来的ip保存的路径,默认使用setting全局配置管理器中的csv_file_path
     # 参数：check_fn: 检测模块的检测函数，默认使用CheckIp类自带的__check_ip方法(该方法使用的检测网站和定制的headers来自setting文件的test_url和test_headers)
     # 参数：check_max_worker : 用来检测池中的线程数，默认是setting文件中的check_max_worker
     # 参数：test_url : 用来检测ip的网址
     # 参数：test_headers: 请求test_url是需要定制headers时，传入此参数，默认就是setting.py中的test_headers
     
-    def __init__(self, ip_from="pool", base_url=crawler_base_url, crawler_headers=crawler_headers, crawler_parse_fn=None,crawler_pages=crawler_pages, save_m=save_mode,check_fn=None, check_max_workers=check_max_worker, test_url=test_url, test_headers=test_headers):
-       self.crawler = CrawlerIp(base_url=base_url,headers=crawler_headers,parse_fn=crawler_parse_fn,pages=crawler_pages,save_mode=save_m)
+    def __init__(self, ip_from="pool", base_url=crawler_base_url, crawler_headers=crawler_headers, crawler_parse_fn=None,crawler_pages=crawler_pages, save_m=save_mode,save_path=csv_file_path,check_fn=None, check_max_workers=check_max_worker, test_url=test_url, test_headers=test_headers):
+       self.crawler = CrawlerIp(base_url=base_url,headers=crawler_headers,parse_fn=crawler_parse_fn,pages=crawler_pages,save_mode=save_m,save_path=save_path)
        self.ip_from = ip_from
        self.check = CheckIp(max_workers=check_max_worker,check_fn=check_fn,ts_url=test_url,ts_headers=test_headers)
        self.proxy_success_rate = 0.0
