@@ -3,7 +3,7 @@ crawler_headers = {
 }
 save_mode = 'a'
 crawler_base_url = "https://www.freeproxy.world/?type=&anonymity=&country=&speed=&port=&page={}"
-crawler_pages = 5
+crawler_pages = 10
 
 check_max_worker = 150
 test_url = "http://httpbin.org/get"

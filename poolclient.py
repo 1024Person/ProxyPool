@@ -28,6 +28,7 @@ class PoolClient(object):
         self.good_ips.columns = ["ip",'scores']
 
         self.__update_ip_pool() # 先将数据池更新一下
+        print("数据池链接成功")
 
     
     # ip生成器，返回Series对象，含有ip和socres两个字段
@@ -97,7 +98,7 @@ class PoolClient(object):
     # good_ips: 删除分数小于或者等于90的，删除重复的
     #           添加分数大于90分的
     def __update_ip_pool(self):
-        print("df.shape:",self.ips_df.shape)
+        # print("数据处理之前：df.shape:",self.ips_df.shape)
         self.ips_df = self.ips_df.drop(index=(self.ips_df.loc[(self.ips_df["scores"] <= 0)].index))
         self.ips_df = self.ips_df.drop_duplicates(subset=["ip"])  # 将重复的ip合并
         # 合并两个dataFrame
@@ -107,7 +108,7 @@ class PoolClient(object):
         self.good_ips = self.good_ips.drop_duplicates(subset=["ip"])
         # 将分数小于90或者等于90分的从good_ips中删除
         self.good_ips = self.good_ips.drop(index=(self.good_ips.loc[(self.good_ips["scores"] <= 90)].index))  # 删除good_ips中分数小于90分的
-        print("df.shape",self.ips_df.shape)
+        # print("去重之后：df.shape",self.ips_df.shape)
 
         
     
@@ -149,19 +150,6 @@ class PoolClient(object):
     def test(self):
         print(self.ips_df.shape)
         print(self.ips_df.iloc[-1])
-
-#   |---------------------------------------------------------------------------    
-#   |    # 注意这里的scores是字符串对象，需要先转化为int对象，                    明
-#   |    # 所以这里就需要将scores列提取出来，将里面的数据处理一下，                天
-#   |     # 然后再放回到ips_df里面，这个应该在__init__函数里面完成的              再
-#   |     #a = self.ips_df["scores"].to_numpy()   字符串列表                    写
-#   |     #b = [int(a[x]) for x in range(a.size)] 整数列表                      @
-#   |     #scores = pd.Series(data=b,dtype=int)   Series对象                    @
-#   |     #self.ips_df["scores"] = scores         更新一下scores列的数据         @
-#   |                                                                           @
-#   | ---------------------------------------------------------------------------
-# self.good_ips = self.ips_df.loc[(self.ips_df["scores"])]
-
 
 if __name__ == "__main__":
     ProxyPool = PoolClient()

@@ -16,7 +16,6 @@ class Scheduler(object):
     # 参数：check_max_worker : 用来检测池中的线程数，默认是setting文件中的check_max_worker
     # 参数：test_url : 用来检测ip的网址
     # 参数：test_headers: 请求test_url是需要定制headers时，传入此参数，默认就是setting.py中的test_headers
-    
     def __init__(self, ip_from="pool", base_url=crawler_base_url, crawler_headers=crawler_headers, crawler_parse_fn=None,crawler_pages=crawler_pages, save_m=save_mode,save_path=csv_file_path,check_fn=None, check_max_workers=check_max_worker, test_url=test_url, test_headers=test_headers):
        self.crawler = CrawlerIp(base_url=base_url,headers=crawler_headers,parse_fn=crawler_parse_fn,pages=crawler_pages,save_mode=save_m,save_path=save_path)
        self.ip_from = ip_from

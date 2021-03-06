@@ -50,6 +50,6 @@ def parse(args):
 if __name__ == "__main__":
     # crawler = CrawlerIp(save_path="./test_ips.csv",base_url=base_url,headers=headers,pages=20,save_mode='a',parse_fn=parse)
     # crawler.crawl_and_save_ip()
-    scheduler = Scheduler(ip_from="web",base_url=base_url,crawler_headers=headers,crawler_parse_fn=parse,save_m='a')
+    scheduler = Scheduler(ip_from="web",base_url=base_url,crawler_headers=headers,crawler_parse_fn=parse,save_m='a',crawler_pages=20)
     scheduler.start_scheduler()
     scheduler.shutdown()

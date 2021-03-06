@@ -1,6 +1,6 @@
 # 检测模块
 from poolclient import PoolClient 
-from setting import test_url,test_headers,USER_AGENT_LIST,check_max_worker
+from setting import test_url,test_headers,USER_AGENT_LIST,check_max_worker,csv_file_path,good_ips_file_path
 from random import choice
 from concurrent.futures import ThreadPoolExecutor
 import requests
@@ -10,10 +10,14 @@ class CheckIp():
     # 参数：check_fn : 检查ip可用性的方法，默认是CheckIp自带的__check方法，如果传入定制的check_fn这个函数的参数必须是一个pd.Series对象，这个对象的index是["ip","scores"]
     # 参数：test_url : 用来检测ip的网址，默认使用setting文件中的test_url
     # 参数：test_headers : 定制headers,默认使用setting文件中的test_headers
-    def __init__(self,max_workers=check_max_worker,check_fn=None,ts_url=test_url,ts_headers=test_headers):
+    # 参数：client_path : 连接器需要获取混沌代理池路径
+    # 参数：client_good_path: 连接器需要获取优质代理池路径
+    def __init__(self,max_workers=check_max_worker,check_fn=None,ts_url=test_url,ts_headers=test_headers,client_path = csv_file_path,client_good_path=good_ips_file_path):
         self.__total_ip_count = 0   # 代理池中代理的数量
         self.__success_ip_count = 0  # 代理池中成功可用代理的数量
-        self.poolclient = PoolClient()
+        self.poolclient = None
+        self.client_path = client_path  
+        self.good_client_path = good_ips_file_path
         self.test_url = ts_url
         self.test_header = ts_headers
         self.CheckPool = ThreadPoolExecutor(max_workers=check_max_worker,thread_name_prefix="CheckIp")
@@ -27,11 +31,16 @@ class CheckIp():
     # 注意：check_fn 函数只能有一个参数：ip(Series对象)
     # 要检测代理ip的网站，需要从setting.py里设置test_url,想定制headers也需要从setting.py文件中设置test_headers
     def start_check(self):
+        self.client_pool()
         print("{}开始运行".format(self.CheckPool._thread_name_prefix))
         for ip in self.poolclient.get_all_ip():
             future = self.CheckPool.submit(self.check_fn,(ip,))
             future.add_done_callback(self.__update_pool)
-        
+    
+    # 链接数据池
+    def client_pool(self):
+        print("正在连接数据池.....")
+        self.poolclient = PoolClient(csv_file_path=self.client_path,good_ips_file_path=self.good_client_path)
         
     
     # 关闭检查池
