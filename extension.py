@@ -21,8 +21,42 @@ _89_base_url = "https://www.89ip.cn/index_{}.html"          # 89代理
 tomato_base_url = "https://www.fanqieip.com/free/China/{}"  # 番茄代理
 
 
+def tomato_parse(args):
+     print("正在爬取番茄代理")
+    page,headers_,url = args[0],args[1],args[2]
+    print("第{}页开始执行解析函数".format(page))
+    ips = []
+    # url = qingting_base_url.format(page)
+    headers_.setdefault('User-Agent',choice(USER_AGENT_LIST))
+    try:
+        response = requests.get(url,headers_)
+        if response.status_code != 200:
+            print("状态码不对")
+            return None
+    except requests.exceptions.ConnectionError:
+        print("链接失败")
+        return None
+    
+    doc = PQ(response.text)
+    trs = doc('tbody > tr').items()
+    for tr in trs:
+        ip = tr('td:nth-child(1)').text()
+        port = tr('td:nth-child(2)').text()
+        if ip and port :
+            proxy = ':'.join((ip,port))
+            ips.append(proxy)
+        else:
+            print("代理未获取到")
+    return ips
+
+
+
+
+
+
 # 第一个参数：page
 # 第二个参数：headers，这个headers使用的crawler对象中的self.headers
+# 第三个参数：url  待爬取网页的url
 def qingting_parse(args):
     print("正在爬取蜻蜓代理")
     page,headers_,url = args[0],args[1],args[2]

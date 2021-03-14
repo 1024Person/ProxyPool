@@ -7,7 +7,6 @@
 import sys
 import os
 import pandas as pd
-sys.path.append(os.path.abspath('..'))
 from scheduler import Scheduler
 import extension
 from setting import csv_file_path
@@ -64,19 +63,24 @@ class Union(object):
 
 if __name__ == "__main__":
     current_path = os.path.dirname(os.path.abspath(__file__))
-    f_path = current_path+"\\89_ip.csv"
-    # f_name = ["\\qingting.csv",'\\kuai.csv']
-    f_path_list = [f_path]
-    # kuai_scheduler = Scheduler(ip_from="web",base_url=kuai_base_url,crawler_parse_fn=kuai_parse,crawler_pages=200,save_m="a",save_path=f_path_list[1],client_path=f_path_list[1],name="快代理调度器")
-    # kuai_scheduler.start_scheduler()
-    # kuai_scheduler.shutdown()
+    # f_path = current_path+"\\89_ip.csv"
+    f_name = ["\\qingting.csv",'\\kuai.csv',"\\89_ip.csv","\\tomato.csv"]
+    f_path_list = [current_path+_ for _ in f_name]
+    kuai_scheduler = Scheduler(ip_from="web",base_url=extension.kuai_base_url,crawler_parse_fn=extension.kuai_parse,crawler_pages=200,save_m="a",save_path=f_path_list[1],client_path=f_path_list[1],name="快代理调度器")
+    kuai_scheduler.start_scheduler()
+    kuai_scheduler.shutdown()
 
-    # qingting_scheduler = Scheduler(ip_from="web",base_url=qingting_base_url,crawler_pages=4,crawler_parse_fn=qingting_parse,save_path=f_path_list[0],save_m="a",client_path=f_path_list[0],name="蜻蜓代理调度器")
-    # qingting_scheduler.start_scheduler()
-    # qingting_scheduler.shutdown()
+    qingting_scheduler = Scheduler(ip_from="web",base_url=extension.qingting_base_url,crawler_pages=4,crawler_parse_fn=extension.qingting_parse,save_path=f_path_list[0],save_m="a",client_path=f_path_list[0],name="蜻蜓代理调度器")
+    qingting_scheduler.start_scheduler()
+    qingting_scheduler.shutdown()
 
-    # scheduler = Scheduler(ip_from='web',base_url=extension._89_base_url,crawler_pages=100,crawler_parse_fn=extension._89_parse,save_m='a',save_path=f_path,client_path=f_path,name="89代理调度器")
-    # scheduler.start_scheduler()
-    # scheduler.shutdown()
-    union = Union(f_path_list)
+    _89_scheduler = Scheduler(ip_from='web',base_url=extension._89_base_url,crawler_pages=10,crawler_parse_fn=extension._89_parse,save_m='a',save_path=f_path[1],client_path=f_path[1],name="89代理调度器")
+    _89_scheduler.start_scheduler()
+    _89_scheduler.shutdown()
+
+    tomato_scheduler = Scheduler(ip_from='web',base_url=extension._89_base_url,crawler_pages=10,crawler_parse_fn=extension._89_parse,save_m='a',save_path=f_path[2],client_path=f_path[2],name="番茄代理调度器")
+    tomato_scheduler.start_scheduler()
+    tomato_scheduler.shutdown()
+    
+    union = Union(f_path_list,True)
     union.run()

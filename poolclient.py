@@ -105,7 +105,7 @@ class PoolClient(object):
         # 将分数大于90分的ip代理，放到good_ips中
         ip = self.ips_df.loc[(self.ips_df["scores"]> 90)]
         self.good_ips = self.good_ips.append(ip,ignore_index=True)
-        self.good_ips = self.good_ips.drop_duplicates(subset=["ip"])
+        self.good_ips = self.good_ips.drop_duplicates(subset=["ip"])  # 去重操作
         # 将分数小于90或者等于90分的从good_ips中删除
         self.good_ips = self.good_ips.drop(index=(self.good_ips.loc[(self.good_ips["scores"] <= 90)].index))  # 删除good_ips中分数小于90分的
         # print("去重之后：df.shape",self.ips_df.shape)
