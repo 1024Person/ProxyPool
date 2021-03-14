@@ -9,13 +9,16 @@ from scheduler import Scheduler
 from threading import Lock
 from pyquery import PyQuery as PQ
 import time
+import re
+import os
 
-
-kuai_base_url = "https://www.kuaidaili.com/free/inha/{}/"
 headers={
     "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0"
 }
-qingting_base_url = "https://ip.jiangxianli.com/?page={}"
+kuai_base_url = "https://www.kuaidaili.com/free/inha/{}/"   # 快代理
+qingting_base_url = "https://ip.jiangxianli.com/?page={}"   # 蜻蜓代理
+_89_base_url = "https://www.89ip.cn/index_{}.html"          # 89代理
+tomato_base_url = "https://www.fanqieip.com/free/China/{}"  # 番茄代理
 
 
 # 第一个参数：page
@@ -84,8 +87,6 @@ def kuai_parse(args):
             ips.append(proxy)
         else:
             print("代理未获取到!\nip:{}\nport:{}\n".format(ip,port))
-            with open('a.html','w') as f:
-                f.write(response.text)
     
     sleep = randint(6,12)  # 随机延迟访问6-11秒
     print(f"延迟{sleep}s后继续爬取，请稍等...")
@@ -115,9 +116,37 @@ def _89_parse(args):
     
     doc = PQ(response.text)
     trs = doc("tbody tr").items()
+    for tr in trs:
+        ip = tr('td:nth-child(1)').text()
+        ip = re.sub('\s','',ip)
+        port = tr('td:nth-child(2)').text()
+        port = re.sub('\s','',port)
+        if ip and port:
+            proxy = ':'.join([ip,port])
+            ips.append(proxy)
+    
+    sleep = randint(4,8)
+    print("延迟{}s后再次进行请求，请稍等...".format(sleep))
+    time.sleep(sleep)
+    return ips
+
 
 
 
 
 if __name__ == "__main__":
-    pass
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    f_path = current_path+"\\89_ip.csv"
+    # f_name = ["\\qingting.csv",'\\kuai.csv']
+    f_path_list = [f_path]
+    # kuai_scheduler = Scheduler(ip_from="web",base_url=kuai_base_url,crawler_parse_fn=kuai_parse,crawler_pages=200,save_m="a",save_path=f_path_list[1],client_path=f_path_list[1],name="快代理调度器")
+    # kuai_scheduler.start_scheduler()
+    # kuai_scheduler.shutdown()
+
+    # qingting_scheduler = Scheduler(ip_from="web",base_url=qingting_base_url,crawler_pages=4,crawler_parse_fn=qingting_parse,save_path=f_path_list[0],save_m="a",client_path=f_path_list[0],name="蜻蜓代理调度器")
+    # qingting_scheduler.start_scheduler()
+    # qingting_scheduler.shutdown()
+
+    scheduler = Scheduler(ip_from='web',base_url=_89_base_url,crawler_pages=100,crawler_parse_fn=_89_parse,save_m='a',save_path=f_path,client_path=f_path,name="89代理调度器")
+    scheduler.start_scheduler()
+    scheduler.shutdown()

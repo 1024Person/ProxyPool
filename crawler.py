@@ -1,8 +1,10 @@
 import requests
 from scrapy import Selector
-from setting import USER_AGENT_LIST,crawler_headers,save_mode
 from random import choice
+import os
+import sys
 from concurrent.futures import ThreadPoolExecutor,wait
+from setting import USER_AGENT_LIST,crawler_headers,save_mode
 from setting import crawler_base_url,csv_file_path
 from save import SaveIp
 
@@ -30,7 +32,13 @@ class CrawlerIp(object):
         else:
             self.parse_fn = parse_fn
         self.future_list = []
+        self.perpare_work(self.save_path)
     
+    # 准备工作，检查传入的文件路径是否存在，如果不存在的话，就创建一个这样的文件
+    def perpare_work(self,path):
+        if not os.path.exists(path):
+            os.mknod(self.path)
+
    
     # 要爬取得网站需要在刚开始创建Crawler对象的时候，
     # 将爬取网站的分页网址基本格式（将页码那个参数空出来）传入进来
@@ -40,8 +48,7 @@ class CrawlerIp(object):
             save = SaveIp(mode=self.save_mode,csv_file_path=self.save_path)
             future = self.PoolSpider.submit(self.parse_fn,(page,self.headers,self.base_url.format(page)))
             self.future_list.append(future)
-            ips = future.result()
-            save.run(ips)
+            future.add_done_callback(save.run)
             # future.add_done_callback(save.run)
         wait(self.future_list)
         print("爬取完成")

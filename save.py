@@ -15,8 +15,9 @@ class SaveIp(object):
         self.csv_file_path = file_path
 
     # 将ip保存到文件中吧，
-    def run(self,ips):
+    def run(self,future):
         # print(future.done())
+        ips = future.result()  #
         if ips: 
             scores = [10 for _ in range(len(ips))]
             df = pd.DataFrame({"ip":ips,"scores":scores})
