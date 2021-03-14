@@ -38,7 +38,7 @@ class CrawlerIp(object):
         for page in range(1,self.pages + 1):
             print("开始爬取第{}页".format(page))
             save = SaveIp(mode=self.save_mode,csv_file_path=self.save_path)
-            future = self.PoolSpider.submit(self.parse_fn,(page,self.headers))
+            future = self.PoolSpider.submit(self.parse_fn,(page,self.headers,self.base_url.format(page)))
             self.future_list.append(future)
             ips = future.result()
             save.run(ips)

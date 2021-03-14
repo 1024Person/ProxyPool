@@ -22,10 +22,10 @@ qingting_base_url = "https://ip.jiangxianli.com/?page={}"
 # 第二个参数：headers，这个headers使用的crawler对象中的self.headers
 def qingting_parse(args):
     print("正在爬取蜻蜓代理")
-    page,headers_ = args[0],args[1]
+    page,headers_,url = args[0],args[1],args[2]
     print("第{}页开始执行解析函数".format(page))
     ips = []
-    url = qingting_base_url.format(page)
+    # url = qingting_base_url.format(page)
     headers_.setdefault('User-Agent',choice(USER_AGENT_LIST))
     try:
         response = requests.get(url,headers_)
@@ -53,10 +53,10 @@ def qingting_parse(args):
 # 代理池还没构造出来，就被封了ip，这个就很尴尬，所以这里延迟访问一下
 def kuai_parse(args):
     print("正在爬取快代理")
-    page,headers_ = args[0],args[1]
+    page,headers_,url = args[0],args[1],args[2]
     print('第',page,'页开始执行解析函数')
     ips = []
-    url = kuai_base_url.format(page)
+    # url = kuai_base_url.format(page)
     ua = choice(USER_AGENT_LIST)
     # 这里也不知道为什么，程序又犯病，直接在setdefault里面随机选择一个user-agent的话，就会设置不上
     headers_['User-Agent'] = ua
@@ -93,17 +93,31 @@ def kuai_parse(args):
     
     return ips
 
+def _89_parse(args):
+    print("正在爬取89代理")
+    page,headers_,url = args[0],args[1],args[2]
+    print('第',page,'页开始执行解析函数')
+    ips = []
+    # url = kuai_base_url.format(page)
+    ua = choice(USER_AGENT_LIST)
+    # 这里也不知道为什么，程序又犯病，直接在setdefault里面随机选择一个user-agent的话，就会设置不上
+    headers_['User-Agent'] = ua
+    # print(headers_)
+    try:
+        response = requests.get(url,headers_,timeout=3)
+        if response.status_code != 200:
+            print("状态码不对")
+            return None
+    except requests.exceptions.ConnectionError as e:
+        print(e.args)
+        print("连接失败")
+        return None
+    
+    doc = PQ(response.text)
+    trs = doc("tbody tr").items()
+
 
 
 
 if __name__ == "__main__":
-    # crawler = CrawlerIp(save_path="./test_ips.csv",base_url=base_url,headers=headers,pages=20,save_mode='a',parse_fn=parse)
-    # crawler.crawl_and_save_ip()
-    # kuai_scheduler = Scheduler(ip_from="web",base_url=kuai_base_url,crawler_parse_fn=kuai_parse,save_m='a',crawler_pages=20,name="快代理调度器")
-    # kuai_scheduler.start_scheduler()
-    # kuai_scheduler.shutdown()
-    # input("按任意键开始爬取下一个网站")
-    # qingting_scheduler = Scheduler(ip_from="web",base_url=qingting_base_url,crawler_parse_fn=qingting_parse,crawler_pages=4,save_m="a",name="蜻蜓代理调度器")
-    # qingting_scheduler.start_scheduler()
-    # qingting_scheduler.shutdown()
     pass

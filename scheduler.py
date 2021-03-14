@@ -71,7 +71,7 @@ class Scheduler(object):
 
     
 if __name__ == "__main__":
-    scheduler = Scheduler(check_max_workers=50,ip_from='web',crawler_pages=10,save_m='a')
+    scheduler = Scheduler(check_max_workers=50,ip_from='pool',crawler_pages=10,save_m='a')
     scheduler.start_scheduler()
     scheduler.shutdown()
     input("按任意键退出")
